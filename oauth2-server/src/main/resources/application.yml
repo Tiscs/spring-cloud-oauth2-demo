@@ -1,0 +1,7 @@
+server:
+  port: 8085
+  context-path: /uaa
+
+spring:
+  application:
+    name: oauth2-server

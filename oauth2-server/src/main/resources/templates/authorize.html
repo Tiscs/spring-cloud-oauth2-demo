@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="authorizationRequest" type="org.springframework.security.oauth2.provider.AuthorizationRequest"*/-->
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <title>Authorize</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Authorize</h1>
+    </div>
+    <p th:inline="text">
+        Do you authorize "[[${authorizationRequest.clientId}]]" at "[[${authorizationRequest.redirectUri}]]" to access your protected resources?
+    </p>
+    <form role="form" action="../oauth/authorize" method="post">
+        <div class="form-group" th:each="scope:${authorizationRequest.scope}">
+            <label for="scope.approve" th:for="${'scope.' + scope + '.approve'}" th:text="${'scope.' + scope + ':'}">scope:</label>
+            <label class="radio-inline">
+                <input type="radio" name="scope" th:name="${'scope.' + scope}" th:id="${'scope.' + scope + '.approve'}" id="scope.approve" value="true" checked="checked" /> Approve
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="scope" th:name="${'scope.' + scope}" th:id="${'scope.' + scope + '.deny'}" id="scope.deny" value="false" /> Deny
+            </label>
+        </div>
+        <input name="user_oauth_approval" value="true" type="hidden" />
+        <input type="hidden" id="csrf_token" name="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+
+</html>
