@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-public class UserController {
+public class OAuth2Controller {
     @RequestMapping("/user")
     @ResponseBody
     public Principal getUser(Principal user) {

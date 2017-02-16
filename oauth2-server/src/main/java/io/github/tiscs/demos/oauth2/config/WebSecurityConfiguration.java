@@ -1,7 +1,7 @@
 package io.github.tiscs.demos.oauth2.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,16 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public WebSecurityConfiguration(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.parentAuthenticationManager(authenticationManager);
         auth.inMemoryAuthentication()
                 .withUser("admin")
                 .password("admin")
