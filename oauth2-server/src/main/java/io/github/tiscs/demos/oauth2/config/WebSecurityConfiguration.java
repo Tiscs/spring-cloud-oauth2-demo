@@ -1,7 +1,6 @@
 package io.github.tiscs.demos.oauth2.config;
 
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,24 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
+@Order(-20)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+    private final AuthenticationManager authenticationManager;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password("admin")
-                .authorities("READ", "WRITE")
-                .and()
-                .withUser("user")
-                .password("user")
-                .authorities("READ");
+    @Autowired
+    public WebSecurityConfiguration(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -36,8 +24,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll()
                 .and()
+                .requestMatchers()
+                .antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access")
+                .and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.parentAuthenticationManager(authenticationManager);
     }
 }
