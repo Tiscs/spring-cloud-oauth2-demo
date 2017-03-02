@@ -9,6 +9,7 @@ public class OAuth2AccountId implements Serializable {
 
     public OAuth2AccountId() {
     }
+
     public OAuth2AccountId(Long oauth2ClientId, Long userAccountId) {
         this.oauth2ClientId = oauth2ClientId;
         this.userAccountId = userAccountId;

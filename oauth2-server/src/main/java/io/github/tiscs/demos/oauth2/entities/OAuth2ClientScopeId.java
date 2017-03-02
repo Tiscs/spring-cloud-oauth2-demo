@@ -9,6 +9,7 @@ public class OAuth2ClientScopeId implements Serializable {
 
     public OAuth2ClientScopeId() {
     }
+
     public OAuth2ClientScopeId(String clientId, String scopeId) {
         this.clientId = clientId;
         this.scopeId = scopeId;

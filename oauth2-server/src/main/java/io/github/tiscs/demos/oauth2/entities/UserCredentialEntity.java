@@ -26,7 +26,7 @@ public class UserCredentialEntity {
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id", insertable = false, updatable = false, nullable = false)
     private UserAccountEntity account;
 
@@ -68,6 +68,14 @@ public class UserCredentialEntity {
 
     public void setExpiresAt(LocalDateTime expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public UserAccountEntity getAccount() {
