@@ -1,5 +1,6 @@
 package io.github.tiscs.demos.oauth2.config;
 
+import io.github.tiscs.demos.oauth2.providers.JPAClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,12 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @EnableAuthorizationServer
 public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
+    private final JPAClientDetailsService clientDetailsService;
 
     @Autowired
-    public OAuth2ServerConfiguration(AuthenticationManager authenticationManager) {
+    public OAuth2ServerConfiguration(AuthenticationManager authenticationManager, JPAClientDetailsService clientDetailsService) {
         this.authenticationManager = authenticationManager;
+        this.clientDetailsService = clientDetailsService;
     }
 
     @Bean
@@ -41,11 +44,6 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("demo-client")
-                .secret("demo-client-secret")
-                .authorizedGrantTypes("authorization_code", "refresh_token", "password", "implicit", "client_credentials")
-                .autoApprove("read")
-                .scopes("read", "write");
+        clients.withClientDetails(clientDetailsService);
     }
 }
