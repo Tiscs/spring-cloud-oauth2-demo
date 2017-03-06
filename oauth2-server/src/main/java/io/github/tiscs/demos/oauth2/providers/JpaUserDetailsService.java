@@ -11,15 +11,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 
 @Component
-public class JPAUserDetailsService implements UserDetailsService {
+public class JpaUserDetailsService implements UserDetailsService {
     private final UserCredentialRepository userCredentialRepository;
     private final UserAccountRepository userAccountRepository;
 
     @Autowired
-    public JPAUserDetailsService(UserCredentialRepository userCredentialRepository, UserAccountRepository userAccountRepository) {
+    public JpaUserDetailsService(UserCredentialRepository userCredentialRepository, UserAccountRepository userAccountRepository) {
         this.userCredentialRepository = userCredentialRepository;
         this.userAccountRepository = userAccountRepository;
     }
@@ -28,13 +31,14 @@ public class JPAUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserCredentialEntity credential = userCredentialRepository.findOneByUserKey(username);
         UserAccountEntity account = userAccountRepository.findOne(credential.getAccountId());
+        LocalDateTime utcNow = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
         return new User(
                 credential.getUserKey(),
                 credential.getSecretCode(),
                 !account.isDisabled(),
-                true,
-                true,
-                true,
+                account.getExpiresAt().isBefore(utcNow),
+                credential.getExpiresAt().isBefore(utcNow),
+                !account.isLocked(),
                 Collections.emptyList()
         );
     }

@@ -11,12 +11,12 @@ import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JPAClientDetailsService implements ClientDetailsService {
+public class JpaClientDetailsService implements ClientDetailsService {
     private final OAuth2ClientRepository oAuth2ClientRepository;
     private final OAuth2ScopeRepository oAuth2ScopeRepository;
 
     @Autowired
-    public JPAClientDetailsService(OAuth2ClientRepository oAuth2ClientRepository, OAuth2ScopeRepository oAuth2ScopeRepository) {
+    public JpaClientDetailsService(OAuth2ClientRepository oAuth2ClientRepository, OAuth2ScopeRepository oAuth2ScopeRepository) {
         this.oAuth2ClientRepository = oAuth2ClientRepository;
         this.oAuth2ScopeRepository = oAuth2ScopeRepository;
     }

@@ -1,6 +1,6 @@
 package io.github.tiscs.demos.oauth2.config;
 
-import io.github.tiscs.demos.oauth2.providers.JPAClientDetailsService;
+import io.github.tiscs.demos.oauth2.providers.JpaClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +19,10 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final RedisConnectionFactory redisConnectionFactory;
-    private final JPAClientDetailsService clientDetailsService;
+    private final JpaClientDetailsService clientDetailsService;
 
     @Autowired
-    public OAuth2ServerConfiguration(AuthenticationManager authenticationManager, RedisConnectionFactory redisConnectionFactory, JPAClientDetailsService clientDetailsService) {
+    public OAuth2ServerConfiguration(AuthenticationManager authenticationManager, RedisConnectionFactory redisConnectionFactory, JpaClientDetailsService clientDetailsService) {
         this.authenticationManager = authenticationManager;
         this.redisConnectionFactory = redisConnectionFactory;
         this.clientDetailsService = clientDetailsService;
