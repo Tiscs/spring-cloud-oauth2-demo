@@ -36,8 +36,8 @@ public class JpaUserDetailsService implements UserDetailsService {
                 credential.getUserKey(),
                 credential.getSecretCode(),
                 !account.isDisabled(),
-                account.getExpiresAt().isBefore(utcNow),
-                credential.getExpiresAt().isBefore(utcNow),
+                !account.getExpiresAt().isBefore(utcNow),
+                !credential.getExpiresAt().isBefore(utcNow),
                 !account.isLocked(),
                 Collections.emptyList()
         );
